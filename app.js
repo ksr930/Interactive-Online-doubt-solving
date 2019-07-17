@@ -26,7 +26,7 @@ function userJoined(user){
 
 	allSockets[user] = this;
 	var allUsers = Object.keys(allSockets);
-	ioServer.emit('user-joined', allUsers);	
+	ioServer.emit('user-joined', allUsers);	// call user joined of client
 }
 
 function userLeft(){
