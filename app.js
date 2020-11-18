@@ -1,9 +1,11 @@
 var express = require('express');
 var http = require('http');
+
 var socketIo = require('socket.io');
 
 var app = express();
 var httpServer = http.Server(app);
+
 var ioServer = socketIo(httpServer);
 var allSockets = {};
 
@@ -18,7 +20,7 @@ function ioServerConnected(socket){
 
 	socket.on('user-joined', userJoined);
 	socket.on('disconnect', userLeft);	
-	socket.on('message', messageReceived);	
+	socket.on('message', messageReceived);		
 }
 
 function userJoined(user){
@@ -26,6 +28,7 @@ function userJoined(user){
 
 	allSockets[user] = this;
 	var allUsers = Object.keys(allSockets);
+
 	ioServer.emit('user-joined', allUsers);	// call user joined of client
 }
 
@@ -56,5 +59,7 @@ function messageReceived(data){
 	}	
 }
 
-httpServer.listen(5000, httpServerConnected);
+
+
+httpServer.listen(5000,httpServerConnected );
 ioServer.on('connection', ioServerConnected);

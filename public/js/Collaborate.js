@@ -9,7 +9,7 @@ $(document).ready(function () {
 
 	// assign variables
 	$userTemplate = $('#userTemplate');
-	$userForm = $('userForm');
+	$userForm = $('#userForm');
 	editors = {};
 	whiteBoards = {};
 	$onlineUsers = $("#onlineUsers");
@@ -17,22 +17,13 @@ $(document).ready(function () {
 
 	// define functions
 	function socketConnected() {
-		//currentUser = window.prompt("Your name please?");
-
-		// if (currentUser && currentUser.length > 0) {
-		// 	currentUser = currentUser.replace(/ /g, "_");
-		// } else {
-		// 	var counter = editors && editors.length > 0 ? editors.length : 1;
-		// 	currentUser = "User_" + counter + 1;
-		// }
-		// 
-		//socket.emit('user-joined', currentUser);
+		console.log('socket connected');
 	}
 
 	function loginUser(event) {
-		event.preventDefault();
+		//event.preventDefault();
 
-		if ($("#userName") && $("#userName").val()) {
+		if ($("#userName") && $("#userName").val() ) {
 			currentUser = $("#userName").val();
 			currentUser = currentUser.replace(/ /g, "_");
 			$('title').html(currentUser);
@@ -89,12 +80,14 @@ $(document).ready(function () {
 		canvas.addEventListener('mouseout', onMouseUp, false);
 		canvas.addEventListener('mousemove', throttle(onMouseMove, 10), false);
 
-		//Touch support for mobile devices
+
 		canvas.addEventListener('touchstart', onMouseDown, false);
 		canvas.addEventListener('touchend', onMouseUp, false);
-		canvas.addEventListener('touchcancel', onMouseUp, false);
 		canvas.addEventListener('touchmove', throttle(onMouseMove, 10), false);
 
+
+
+		
 		for (var i = 0; i < colors.length; i++) {
 			colors[i].addEventListener('click', onColorUpdate, false);
 		}
@@ -341,7 +334,7 @@ $(document).ready(function () {
 	}
 
 	//message related to drawing
-	function drawLine(x0, y0, x1, y1, emit) {
+	function drawLine(x0, y0, x1, y1) {
 		var otherUser = $('div.big span[purpose=user-name]').html();
 		var context = whiteBoards[otherUser].context;
 		if (whiteBoards[otherUser].isDisabled) {
@@ -360,12 +353,7 @@ $(document).ready(function () {
 		context.stroke();
 		context.closePath();
 
-		if (!emit) {
-			return;
-		}
-		//var w = canvas.width;
-		//var h = canvas.height;
-
+		
 		var message1 = {
 			x0: x0,
 			y0: y0,
@@ -476,13 +464,10 @@ $(document).ready(function () {
 	// define Init
 	function Init() {
 		socket = io();
-
 		socket.on("connect", socketConnected);
 		socket.on('user-joined', userJoined);
 		socket.on('user-left', userLeft);
 		socket.on('message', messageReceived);
-
-
 
 		//$(document).on("keypress", "textarea[purpose=chat]", sendChatMessage);
 		$(document).on("click", "a[action=control]:not([disabled])", sendControlMessage);
@@ -496,11 +481,8 @@ $(document).ready(function () {
 		$(document).on("click", "i[id=sendicon]", sendChatMessage);
 
 		userJoined(["public"]);
-		$onlineUsers.hide();
-
-		
+		$onlineUsers.hide();		
 	}
-
 	// Call Init
 	Init();
 });
